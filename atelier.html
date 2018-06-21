@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Atelier Javascript</title>
+	<meta charset="utf-8" />
+    <link href="css/atelier.css" rel="stylesheet" />
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/fonctions.js"></script>
+</head>
+<body>
+
+
+    <header>
+        <div id="divUser"></div>
+        <ul>
+            <li>
+                <button id="btnPolice">Augmenter la police</button>
+            </li>
+            <li>
+                <button id="btnCompte">Compter la lettre suivante : </button> 
+                <input type="text" id="txtLettre" maxlength="1" />
+            </li>
+            <li>
+                <button id="btnQuestionnaire">Répondre au questionnaire</button>
+            </li>
+        </ul>
+        <div id="divNbOccurences"></div>
+        <h1>Le JavaScript</h1>
+    </header>
+
+    <section id="sectionTexte">
+        <img src="img/js.jpg" />
+        <div>
+            <p>
+                JavaScript est un langage de programmation de scripts principalement employé dans les pages web interactives mais aussi pour les serveurs2 avec l'utilisation (par exemple) de Node.JS. C'est un langage orienté objet à prototype, c'est-à-dire que les bases du langage et ses principales interfaces sont fournies par des objets qui ne sont pas des instances de classes, mais qui sont chacun équipés de constructeurs permettant de créer leurs propriétés, et notamment une propriété de prototypage qui permet d'en créer des objets héritiers personnalisés. En outre, les fonctions sont des objets de première classe.
+            </p>
+
+            <p>
+                JavaScript a été créé en 1995 par Brendan Eich. Il a été standardisé sous le nom d'ECMAScript en juin 1997 par Ecma International dans le standard ECMA-262. Le standard ECMA-262 en est actuellement à sa 7e édition. JavaScript n'est depuis qu'une implémentation d'ECMAScript, celle mise en œuvre par la fondation Mozilla. L'implémentation d'ECMAScript par Microsoft se nomme JScript, tandis que celle d'Adobe Systems se nomme ActionScript.
+            </p>
+        </div>
+    </section>
+
+    <section id="sectionQuestionnaire">
+        <h1>Questionnaire</h1>
+        <div>
+            <label>Avez-vous aimé ce texte ?</label>
+            <input type="radio" name="rdoQ1" id="rdo1" value="1" /> oui
+            <input type="radio" name="rdoQ1" id="rdo2" value="0" /> Non
+        </div>
+        <div>
+            <label>Donnez une note de 1 à 5 à ce texte :</label> 
+            <input type="text" id="txtNote" maxlength="1" />
+        </div>
+        <button id="btnValider">Valider le questionnaire</button>
+    </section>
+
+
+    <script>
+        var nom;
+
+        $(document).ready(function () {
+            nom = '';
+            while (nom == '') {
+                nom = prompt("Indiquez votre pseudo");
+                if (nom != '' && nom != null) {
+                    $("#divUser").html("Bonjour " + nom + " !");
+                    $("#sectionTexte").show(2000);
+
+                } else {
+                    alert('Votre pseudo ne peut pas être vide');
+                }
+                texte_origine = $("#sectionTexte > div").html();
+            }
+
+            $("#btnPolice").click(function () {
+                show_texte();
+                if ($("body").hasClass("accessible")) {
+                    $("body").removeClass("accessible");
+                    $(this).text("Augmenter la police");
+                }
+                else {
+                    $("body").addClass("accessible");
+                    $(this).text("Diminuer la police");
+                }                
+            }); // fin btnPolice click
+
+            $("#btnCompte").click(function () {
+                show_texte();
+                $("#sectionTexte > div ").html(texte_origine);
+                $("#divNbOccurences").empty();
+                var lettre = $("#txtLettre").val().toLowerCase();
+                var nb_occurences = 0;
+                if (lettre != '') {
+                    var texte = $("#sectionTexte p").text();
+                    for (i = 0; i < texte.length; i++) {
+                        if (texte[i].toLowerCase() == lettre) {
+                            nb_occurences++;
+                        }
+                    }
+                    
+                    $("#divNbOccurences").html("La lettre " + lettre + " apparaît " + nb_occurences + " fois dans ce texte");
+
+                    
+                    nb_occurences = 0;
+                    $("#sectionTexte p").each(function (i, elm) {
+                        var pattern = new RegExp("(" + lettre + ")", 'ig');
+                        nb_occurences += $(elm).text().match(pattern).length;
+                        var new_texte = $(elm).text().replace(pattern, "<strong>$1</strong>");
+                        $(elm).html(new_texte);
+                    });
+                    
+                    
+                }
+                else {
+                    alert('La lettre ne peut pas être vide !')
+                }
+            }); // fin btnCompte click
+
+            $("#sectionTexte img").click(function () {
+                $("<div>").addClass("masque").appendTo($("body"));
+                $(this).clone().appendTo($("div.masque"));
+                $("div.masque").click(function () {
+                    $("div.masque").remove();
+                });
+            });//fin zoom image
+
+
+            $("#btnQuestionnaire").click(function () {
+                show_questionnaire();
+            });
+
+            $("#txtNote").keyup(function (event) {
+                switch ( $(this).val() )
+                {
+                    case "1":
+                    case "2":
+                    case "3":
+                    case "4":
+                    case "5":
+                        $(this).parent().addClass("valide");
+                        break;
+                    default :
+                        $(this).val("");
+                        $(this).parent().removeClass("valide");
+                        alert("Veuillez saisir un chiffre de 1 à 5 !");
+                        break;
+                }
+            });//fin txtNote KeyUp
+
+            $("input[name='rdoQ1']").change(function () {
+                $(this).parent().addClass("valide");
+            });//fin rdoQ1 change
+
+            $("#btnValider").click(function () {
+                if ($("#sectionQuestionnaire div.valide").length == 2) {
+                    $("<div>").html("Merci d'avoir répondu à notre questionnaire " + nom).addClass("confirmation").appendTo($("header"));
+                    show_texte();
+                }
+                else {
+                    alert("Vous devez répondre aux 2 questions svp !");
+                }
+            })//fin bouton valider
+
+        }); //fin document ready
+
+
+
+
+    </script>
+</body>
+</html>

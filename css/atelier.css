@@ -1,0 +1,91 @@
+﻿body {
+    font-family:Calibri,Arial;
+    font-size:1em;
+}
+
+body.accessible{
+    font-size:1.4em;
+}
+
+header ul{
+
+}
+header ul li{
+    display:inline-block;
+}
+
+#divUser{
+    float:right;
+    margin-right:20px;
+}
+
+h1{
+    border-bottom:1px solid #aaa;
+    margin:10px 40px;
+}
+
+#txtLettre {
+    width:10px;
+}
+
+#sectionTexte{
+    display:none;
+    padding:40px;
+}
+
+#sectionTexte img{
+    float:left;
+    margin-right:10px;
+    cursor:pointer;
+}
+
+span.orange,#sectionTexte strong{
+    color:#ff6a00;
+    font-weight:bold;
+}
+
+#sectionQuestionnaire{
+    display:none;
+    padding:40px;
+}
+
+#sectionQuestionnaire h1{
+    margin-left:0px;
+
+}
+
+#sectionQuestionnaire > div{
+    margin : 15px 0px;
+    border:1px solid #ff0000;
+    width:450px;
+    padding : 10px;
+}
+
+    #sectionQuestionnaire > div.valide {
+        border : 1px solid #358737;
+    }
+
+div.confirmation{
+    text-align:center;
+    border:1px solid #358737;
+    font-weight:bold;
+    color:#358737;
+    padding:10px;
+    margin:20px 40px;
+}
+
+div.masque{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    text-align: center;
+    padding-top: 100px;
+    z-index:100;
+}
+div.masque img{
+    width : 480px;
+    height: 392px;
+}
